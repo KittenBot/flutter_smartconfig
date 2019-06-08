@@ -4,7 +4,12 @@ import 'dart:async';
 import 'package:flutter/services.dart';
 import 'package:smartconfig/smartconfig.dart';
 
-void main() => runApp(MyApp());
+void main() async {
+  Smartconfig.start("Kittenbot", "78:44:fd:72:7e:68", "kittenbot428").then((onValue){
+    print("sm version $onValue");  
+  });
+  runApp(MyApp());
+}
 
 class MyApp extends StatefulWidget {
   @override

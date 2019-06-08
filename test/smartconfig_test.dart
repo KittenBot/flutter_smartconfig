@@ -15,7 +15,4 @@ void main() {
     channel.setMockMethodCallHandler(null);
   });
 
-  test('getPlatformVersion', () async {
-    expect(await Smartconfig.platformVersion, '42');
-  });
 }

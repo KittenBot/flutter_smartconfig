@@ -1,8 +1,8 @@
 name: smartconfig
-description: A new flutter plugin project.
+description: Smartconfig port for flutter app
 version: 0.0.1
-author:
-homepage:
+author: riven <4771215@qq.com>
+homepage: https://github.com/kittenbot/flutter_smartconfig
 
 environment:
   sdk: ">=2.1.0 <3.0.0"
