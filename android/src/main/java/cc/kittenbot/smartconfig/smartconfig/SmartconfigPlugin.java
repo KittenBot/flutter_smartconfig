@@ -48,7 +48,7 @@ public class SmartconfigPlugin implements MethodCallHandler {
     }
   }
 
-  public void start(String ssid, String pass, Result smartconfig){
+  public void start(String ssid, String bssid, String pass, final Result smResult){
     new EsptouchAsyncTask(new TaskListener() {
         @Override
         public void onFinished(List<IEsptouchResult> result) {
@@ -70,26 +70,27 @@ public class SmartconfigPlugin implements MethodCallHandler {
             if(resolved) {
               Log.d(TAG, "Success run smartconfig");
               // promise.resolve(ret);
-              smartconfig.success(ret);
+              smResult.success(ret);
             } else {
               Log.d(TAG, "Error run smartconfig");
               // promise.reject("new IllegalViewOperationException()");
-              smartconfig.error("Fail", "Smart config fail.", null);
+              smResult.error("Fail", "Smart config fail.", null);
             }
 
         }
-    }, this.activity.getApplicationContext()).execute(ssid, new String(""), pass, "YES", "1");
+    }).execute(ssid, bssid, pass, "YES", "1");
   }
 
   @Override
   public void onMethodCall(MethodCall call, Result result) {
     if (call.method.equals("start")) {
       String ssid = call.argument("ssid");
-      String pass = call.argument("password");
+      String bssid = call.argument("bssid");
+      String pass = call.argument("pass");
 
       Log.d(TAG, "ssid " + ssid + ":pass " + pass);
       stop();
-      start(ssid, pass, result);
+      start(ssid, bssid, pass, result);
       // result.success("Android " + android.os.Build.VERSION.RELEASE);
     } else {
       result.notImplemented();
@@ -109,12 +110,10 @@ public class SmartconfigPlugin implements MethodCallHandler {
     //     public void onFinished(List<IEsptouchResult> result);
     // }
     private final TaskListener taskListener;
-    private final Context appContext;
 
-    public EsptouchAsyncTask(TaskListener listener, Context appContext) {
+    public EsptouchAsyncTask(TaskListener listener) {
       // The listener reference is passed in through the constructor
       this.taskListener = listener;
-      this.appContext = appContext;
     }
 
 
@@ -145,8 +144,9 @@ public class SmartconfigPlugin implements MethodCallHandler {
           isSsidHidden = true;
         }
         taskResultCount = Integer.parseInt(taskResultCountStr);
-        mEsptouchTask = new EsptouchTask(apSsid, apBssid, apPassword,
-                isSsidHidden, this.appContext);
+        Context context = activity.getApplicationContext();
+        mEsptouchTask = new EsptouchTask(apSsid, apBssid, apPassword, context);
+        mEsptouchTask.setPackageBroadcast(true);
 
         //mEsptouchTask.setEsptouchListener(myListener);
       }

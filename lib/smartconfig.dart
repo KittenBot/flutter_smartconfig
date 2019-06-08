@@ -6,8 +6,14 @@ class Smartconfig {
   static const MethodChannel _channel =
       const MethodChannel('smartconfig');
 
-  static Future<String> start(String ssid, String pass) async {
-    final String version = await _channel.invokeMethod('getPlatformVersion', {"ssid": ssid, "pass": pass});
-    return version;
+  static Future start(String ssid, String bssid, String pass) async {
+    try {
+      Map<String, String> rm = await _channel.invokeMethod('start', {"ssid": ssid, "bssid": bssid, "pass": pass});
+      return rm;
+    } catch(err){
+      print("Error, $err");
+      return null;
+    }
+    
   }
 }
