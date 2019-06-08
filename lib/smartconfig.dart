@@ -6,8 +6,8 @@ class Smartconfig {
   static const MethodChannel _channel =
       const MethodChannel('smartconfig');
 
-  static Future<String> get platformVersion async {
-    final String version = await _channel.invokeMethod('getPlatformVersion');
+  static Future<String> start(String ssid, String pass) async {
+    final String version = await _channel.invokeMethod('getPlatformVersion', {"ssid": ssid, "pass": pass});
     return version;
   }
 }
