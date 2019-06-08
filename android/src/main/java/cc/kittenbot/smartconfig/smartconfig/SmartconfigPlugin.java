@@ -68,7 +68,7 @@ public class SmartconfigPlugin implements MethodCallHandler {
             }
 
             if(resolved) {
-              Log.d(TAG, "Success run smartconfig");
+              Log.d(TAG, "Success run smartconfig"+ret);
               // promise.resolve(ret);
               smResult.success(ret);
             } else {
